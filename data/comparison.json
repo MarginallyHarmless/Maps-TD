@@ -1,0 +1,26 @@
+{
+  "osm": {
+    "buildings": 349,
+    "roads": 179,
+    "trees": 785,
+    "heightSources": {
+      "floor count": 82,
+      "estimated": 266,
+      "height tag": 1
+    },
+    "decorativeTrees": 13,
+    "pitchedRoofs": 183,
+    "mappedPassages": 2,
+    "navigableCells": 24046
+  },
+  "overture": {
+    "buildings": 371,
+    "withHeight": 1,
+    "withFloors": 83,
+    "mostlyUnmatched": 22,
+    "sourceDatasets": {
+      "OpenStreetMap": 350,
+      "Microsoft ML Buildings": 21
+    }
+  }
+}

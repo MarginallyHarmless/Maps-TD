@@ -1,0 +1,29 @@
+[
+  {
+    "id": "alba-iulia",
+    "name": "Piața Alba Iulia",
+    "city": "București, Sector 3",
+    "sector": "Sector 3",
+    "center": {"lat": 44.4255759, "lon": 26.1290765},
+    "extent": 600,
+    "bbox": [26.12531, 44.42288, 26.13285, 44.42828],
+    "rawDirectory": "data/raw",
+    "comparisonFile": "data/comparison.json",
+    "defaultBuildingName": "Bl. i 1",
+    "streetLabels": ["Bulevardul Unirii", "Bulevardul Decebal", "Bulevardul Burebista"]
+  },
+  {
+    "id": "charles-de-gaulle",
+    "name": "Piața Charles de Gaulle",
+    "city": "București, Sector 1",
+    "sector": "Sector 1 · Aviatorilor",
+    "center": {"lat": 44.466, "lon": 26.0867},
+    "extent": 600,
+    "bbox": [26.0824, 44.4629, 26.091, 44.4691],
+    "rawDirectory": "data/raw/charles-de-gaulle",
+    "comparisonFile": "data/charles-de-gaulle-comparison.json",
+    "defaultBuildingName": "Charles de Gaulle Plaza",
+    "defaultBuildingSourceId": "way/216673929",
+    "streetLabels": ["Bulevardul Aviatorilor", "Bulevardul Mareșal Constantin Prezan", "Calea Dorobanților", "Bulevardul Primăverii"]
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "osm": {
+    "buildings": 279,
+    "roads": 182,
+    "trees": 1,
+    "heightSources": {
+      "floor count": 25,
+      "estimated": 253,
+      "height tag": 1
+    },
+    "decorativeTrees": 251,
+    "pitchedRoofs": 151,
+    "mappedPassages": 0,
+    "navigableCells": 26943
+  },
+  "overture": null
+}

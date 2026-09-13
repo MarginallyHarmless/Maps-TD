@@ -1,0 +1,35 @@
+Local Defense — Bucharest prototype map data
+
+© OpenStreetMap contributors
+https://www.openstreetmap.org/copyright
+
+This local metric level dataset is derived from OpenStreetMap and is made
+available under the Open Database License (ODbL) 1.0:
+https://opendatacommons.org/licenses/odbl/1-0/
+
+The derivative dataset, including the converted footprints, inferred heights,
+roads, trees, navigation grid, inferred entrances and attribution, is supplied
+in full as alba-iulia.json and charles-de-gaulle.json beside this notice.
+Each file provides the machine-readable database used for that neighborhood.
+
+Piața Alba Iulia snapshot: 2026-09-13T17:35:27Z.
+Center: 44.4255759 N, 26.1290765 E. Extent: 600 m square.
+
+Piața Charles de Gaulle snapshot: 2026-09-13T18:24:21Z.
+Center: 44.466 N, 26.0867 E. Extent: 600 m square.
+Default stronghold: Charles de Gaulle Plaza, Piața Charles de Gaulle 15,
+OpenStreetMap way 216673929.
+
+Modifications: metric reprojection and clipping, geometry repair, omission of
+small polygons and a legacy non-building import feature, height and road-width
+defaults, raster navigation and inferred approaches. See the dataset's
+assumptions and per-building heightSource fields.
+
+Version 2 adds sourced road/roof attributes and procedural visual detail.
+Roof rise/orientation, inferred roof shapes, facade patterns, roof equipment,
+and supplemental park planting are approximations. Generated trees are
+separate from surveyed map trees in decorativeTrees and marked procedural.
+Navigation and original footprints are preserved.
+
+No Google Maps or Google Earth imagery or geometry is included.
+Overture data is used only in the separate research comparison.
