@@ -7,6 +7,7 @@ import { detailedGround, detailedBuildings, detailedTrees } from './scenery.js';
 import { cellPoint, pointCell, findRoute, routeLength } from './navigation.js';
 
 const $=id=>document.getElementById(id);
+const dataUrl=file=>`${import.meta.env.BASE_URL}data/${file}`;
 let life, vegetation, sceneryStats, data, mapConfig, selected, path=[], pathPoints=[], totalLength=0, routeGroup=new THREE.Group();
 let mode='select', running=false, health=20, spawned=0, defeated=0, escaped=0, spawnClock=0;
 const mapLabels=[];
@@ -154,18 +155,18 @@ let last=performance.now();
 renderer.setAnimationLoop(now=>{const dt=Math.min((now-last)/1000,.06);last=now;controls.update();advance(dt);life?.animate(now/1000);updateLabels();$('map-shell').querySelector('.north').style.transform=`rotate(${-controls.getAzimuthalAngle()*180/Math.PI}deg)`;retro.render(scene,camera);});
 
 try{
-  const catalogResponse=await fetch('/data/maps.json');if(!catalogResponse.ok)throw new Error('Map catalog could not load');
+  const catalogResponse=await fetch(dataUrl('maps.json'));if(!catalogResponse.ok)throw new Error('Map catalog could not load');
   const catalog=await catalogResponse.json(), params=new URLSearchParams(location.search);
   mapConfig=catalog.find(m=>m.id===params.get('map')) || catalog[0];
   const field=String(catalog.indexOf(mapConfig)+1).padStart(3,'0');
   $('map-select').replaceChildren(...catalog.map(m=>{const option=document.createElement('option');option.value=m.id;option.textContent=m.name;return option;}));
   $('map-select').value=mapConfig.id;$('map-select').disabled=false;
   $('map-select').onchange=()=>{const url=new URL(location.href);url.searchParams.set('map',$('map-select').value);location.assign(url);};
-  const response=await fetch(`/data/${mapConfig.id}.json`);if(!response.ok)throw new Error(`Map load failed: ${response.status}`);data=await response.json();
+  const response=await fetch(dataUrl(`${mapConfig.id}.json`));if(!response.ok)throw new Error(`Map load failed: ${response.status}`);data=await response.json();
   document.title=`Local Defense · ${data.name}`;$('map-title').textContent=data.name;
   $('field-number').textContent=`FIELD TEST / ${field}`;$('neighborhood-number').textContent=`NEIGHBORHOOD / ${field}`;$('map-number').textContent=field.slice(1);
   $('location-details').textContent=`${mapConfig.sector} · ${data.center.lat.toFixed(5)}° N, ${data.center.lon.toFixed(5)}° E`;
-  $('map-extent').textContent=`${data.extent} m`;$('download-map').href=`/data/${mapConfig.id}.json`;
+  $('map-extent').textContent=`${data.extent} m`;$('download-map').href=dataUrl(`${mapConfig.id}.json`);
   makeGround();makeBuildings();makeTrees();makeLabels();
   $('scenery-note').textContent=`Procedural facades & roof details${data.decorativeTrees?.length?' · generated park trees':''}.`;
   $('building-count').textContent=data.stats.buildings;$('tree-count').textContent=data.stats.trees;

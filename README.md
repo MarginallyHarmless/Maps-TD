@@ -1,5 +1,7 @@
 # Local Defense — Bucharest neighborhoods
 
+[Play the live game](https://marginallyharmless.github.io/Maps-TD/) · [Open Charles de Gaulle](https://marginallyharmless.github.io/Maps-TD/?map=charles-de-gaulle)
+
 A playable browser experiment built from real OpenStreetMap geometry in Bucharest. Choose between two 600 × 600 m neighborhoods using the sidebar selector:
 
 - **Piața Alba Iulia** — initial stronghold: Bl. i 1.
@@ -71,3 +73,12 @@ Retro rendering lives in `src/retro-renderer.js`. Three.js draws to a target at 
 `src/tree-sprites.js` draws an original five-variant pixel atlas in code. Instanced camera-facing foliage has stepped silhouettes, connected highlight clusters, trunks, and ground shadows. The atlas has transparent gutters and mipmaps to reduce edge shimmer without bleeding between tree variants. This is a hybrid of projected map geometry and sprites, not a hand-painted tileset. Building footprints, source heights, tree positions, and navigation data remain unchanged. Sprites are a visual abstraction, including in top-down view.
 
 The neighborhood detail includes occasional stylized blossoms and golden foliage, small parked cars, storefront accents, and a fluttering stronghold pennant. These additions are artistic, not surveyed street objects or botanical classifications. Cars are placed beside eligible roads on navigable open ground, avoid trees, and clear within 5 m of the route or 8 m of towers. A larger, unlit pennant stays readable above the selected objective; reduced-motion preferences disable its flutter. The revised default starts in 16-BIT once, then saves subsequent style choices locally.
+
+GitHub Pages is deployed by `.github/workflows/pages.yml` on pushes to `main` or manual dispatch. The workflow installs locked dependencies, runs the unit tests, builds with the `/Maps-TD/` base path, and publishes only `dist`. Map fetches, downloads, and local links use Vite’s deployment base. To check the same production build locally:
+
+```bash
+npm run build:pages
+npm run preview:pages
+# In another terminal, using the preview URL printed above:
+TD_BASE_URL=http://127.0.0.1:4173/Maps-TD PLAYWRIGHT_BROWSERS_PATH=/tmp/td-playwright node scripts/browser-check.mjs
+```

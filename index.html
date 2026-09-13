@@ -3,13 +3,13 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#151e2e"><title>Local Defense · Bucharest</title><link rel="stylesheet" href="/src/style.css"></head>
 <body>
 <aside>
-  <a class="brand" href="/" aria-label="Local Defense home"><span class="brand-icon">⌖</span><span>LOCAL<span class="brand-light">DEFENSE</span></span><small id="field-number">FIELD TEST</small></a>
+  <a class="brand" href="%BASE_URL%" aria-label="Local Defense home"><span class="brand-icon">⌖</span><span>LOCAL<span class="brand-light">DEFENSE</span></span><small id="field-number">FIELD TEST</small></a>
   <div class="intro"><span class="eyebrow">BUCHAREST · ROMANIA</span><h1>Your streets.<br>Your stronghold.</h1><p>A real neighborhood, reimagined as a battlefield. Pick a building to defend.</p></div>
   <section class="location"><div class="location-top"><span class="live-dot"></span> OPEN MAP PROTOTYPE <span id="map-number">—</span></div><label class="map-picker-label" for="map-select">Choose neighborhood</label><select id="map-select" disabled><option>Loading maps…</option></select><p id="location-details">Bucharest</p><div class="stats"><div><strong id="building-count">—</strong><span>buildings</span></div><div><strong id="tree-count">—</strong><span>mapped trees</span></div><div><strong id="map-extent">—</strong><span>map width</span></div></div></section>
   <section class="objective"><div class="eyebrow">01 / CHOOSE YOUR STRONGHOLD</div><h3 id="target-name">Loading neighborhood…</h3><p id="target-info">Fetching the saved map snapshot.</p><div id="height-note" class="subtle"></div></section>
   <section class="route-section"><div class="eyebrow">02 / PLAN THE APPROACH</div><label for="spawn">Enemy entry <span id="route-length">—</span></label><select id="spawn" aria-label="Enemy entry"></select><div class="mode-buttons"><button id="select-mode" class="active">⌖ Select building</button><button id="tower-mode">＋ Place tower</button></div><p class="hint" id="mode-hint">Click a building on the map to defend it.</p></section>
   <section class="wave-section"><div class="battle-stats"><span>DEFENSE <b id="health">20 / 20</b></span><span>TOWERS <b id="tower-count">0 / 8</b></span></div><button class="primary" id="start" disabled><span>Test an enemy wave</span><span>↗</span></button><button id="reset" class="text-button">Reset defenses</button><p id="status" role="status" aria-live="polite">Preparing map…</p></section>
-  <div class="sidebar-footer">Built from open map geometry.<br><span id="scenery-note">Procedural facades & roof details.</span><br><a id="download-map" download>Download map data</a> · <a href="/data/NOTICE.txt">License</a></div>
+  <div class="sidebar-footer">Built from open map geometry.<br><span id="scenery-note">Procedural facades & roof details.</span><br><a id="download-map" download>Download map data</a> · <a href="%BASE_URL%data/NOTICE.txt">License</a></div>
 </aside>
 <main id="map-shell">
   <div id="map" aria-label="Interactive isometric neighborhood map"></div>

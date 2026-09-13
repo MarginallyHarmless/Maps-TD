@@ -2,8 +2,8 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
-const server=await createServer({server:{host:'127.0.0.1',port:5185,strictPort:false}});await server.listen();
-const base=`http://127.0.0.1:${server.httpServer.address().port}`;
+const server=process.env.TD_BASE_URL?null:await createServer({server:{host:'127.0.0.1',port:5185,strictPort:false}});await server?.listen();
+const base=(process.env.TD_BASE_URL||`http://127.0.0.1:${server.httpServer.address().port}`).replace(/\/$/,'');
 const browser=await chromium.launch({...process.env.TD_BROWSER?{executablePath:process.env.TD_BROWSER}:{},headless:true,
   env:{...process.env,XDG_CONFIG_HOME:'/tmp/td-browser-config',XDG_CACHE_HOME:'/tmp/td-browser-cache'},
   args:['--no-sandbox','--no-zygote','--single-process','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
@@ -23,7 +23,11 @@ if(map==='charles-de-gaulle'){
   assert.equal(await page.evaluate(()=>td.state.selected),'way/216673929/0');
   assert.match(await page.locator('#target-info').textContent(),/Charles de Gaulle 15/);
 }
-assert.equal(await page.locator('#download-map').getAttribute('href'),`/data/${map}.json`);
+assert.equal(await page.locator('#download-map').evaluate(a=>a.href),`${base}/data/${map}.json`);
+assert.equal(await page.locator('.brand').evaluate(a=>a.href),`${base}/`);
+const license=await page.locator('.sidebar-footer a').last().evaluate(a=>a.href);
+assert.equal(license,`${base}/data/NOTICE.txt`);
+assert.equal((await page.request.get(license)).status(),200);
 assert.equal(await page.evaluate(()=>td.state.health),20);
 assert.equal(await page.evaluate(()=>td.state.towers),0);
 assert.ok(await page.evaluate(()=>td.state.scenery.pitchedRoofs>0),'pitched roofs generated');
@@ -122,4 +126,4 @@ assert.ok(denseFrame.colorCount<=48&&denseFrame.colorCount>24,'high DPI preserve
 assert.deepEqual(await page.locator('#map canvas').evaluate(c=>({x:c.getBoundingClientRect().width/c.width,y:c.getBoundingClientRect().height/c.height})),{x:2,y:2},'odd viewport and high DPI preserve integer pixels');
 if(errors.length)throw Error(errors.join('\n'));
 console.log('All browser checks passed, including style persistence and map switching.');
-}finally{await browser.close();await server.close();}
+}finally{await browser.close();await server?.close();}
