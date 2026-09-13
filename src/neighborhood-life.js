@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { pixelMaterial } from './pixel-material.js';
+import { markAccent } from './art-direction.js';
 import { pointCell } from './navigation.js';
 
 // Decorative props are inferred from road geometry, never claimed as surveyed objects.
@@ -31,7 +32,7 @@ export function neighborhoodLife(scene,data){
   const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.minFilter=texture.magFilter=THREE.NearestFilter;texture.generateMipmaps=false;
   const geometry=new THREE.PlaneGeometry(14,7,8,2);geometry.translate(7,10,0);
   const rest=geometry.attributes.position.array.slice();
-  const cloth=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));flag.add(cloth);flag.rotation.y=Math.PI/4;scene.add(flag);
+  const cloth=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));markAccent(cloth.material,'target');flag.add(cloth);flag.rotation.y=Math.PI/4;scene.add(flag);
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
   const setTarget=b=>{flag.visible=!!b;if(b)flag.position.set(b.center[0],b.height+.3,b.center[1]);};
   const update=(route,towers)=>{

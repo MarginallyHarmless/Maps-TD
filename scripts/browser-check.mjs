@@ -32,6 +32,16 @@ assert.equal(await page.evaluate(()=>td.state.health),20);
 assert.equal(await page.evaluate(()=>td.state.towers),0);
 assert.ok(await page.evaluate(()=>td.state.scenery.pitchedRoofs>0),'pitched roofs generated');
 if(map==='charles-de-gaulle'){assert.ok(await page.evaluate(()=>td.state.scenery.glassPanels>100),'glass facade panels generated');assert.ok(await page.evaluate(()=>td.state.scenery.decorativeTrees>100),'park planting visible');}
+await page.click('#style-mono');
+const mono=await page.evaluate(()=>td.sampleFrameForTesting());
+assert.equal(mono.style,'mono');assert.ok(mono.colorCount>12&&mono.colorCount<=39);
+assert.ok(mono.chromaticPixels>20&&mono.chromaticPixels/mono.pixelCount<.08,'Noir keeps color confined to game highlights');
+assert.equal(await page.evaluate(()=>document.documentElement.dataset.art),'mono');
+mkdirSync('artifacts',{recursive:true});
+await page.screenshot({path:`artifacts/${map}-noir.png`,timeout:60000});
+await page.click('#focus-view');await page.evaluate(()=>td.sampleFrameForTesting());
+await page.screenshot({path:`artifacts/${map}-noir-stronghold.png`,timeout:60000});
+await page.click('#iso');
 await page.click('#style-16');
 await page.waitForTimeout(400);
 const frame16=await page.evaluate(()=>td.sampleFrameForTesting());
@@ -80,6 +90,17 @@ const p=await page.evaluate(id=>td.projectBuilding(id),alternative), rect=await 
 await page.mouse.click(rect.x+p.x,rect.y+p.y);assert.equal(await page.evaluate(()=>td.state.selected),alternative,'click selects a real building');
 await page.evaluate(id=>td.selectBuilding(id),initial);
 for(const value of ['1','2','3','0']){await page.selectOption('#spawn',value);assert.ok(await page.evaluate(()=>td.state.path.length>0),'entry has a route');}
+// Check enemy color before installing defenses that can eliminate the first
+// enemy immediately. Sample several positions so mapped trees cannot hide it.
+await page.click('#style-mono');await page.click('#start');
+let coralSeen=false;
+for(let step=0;step<6&&!coralSeen;step++){
+  await page.evaluate(()=>td.advanceForTesting(1));
+  const frame=await page.evaluate(()=>td.sampleFrameForTesting());
+  coralSeen=frame.colors.some(v=>((v>>16)&255)>((v>>8)&255)*1.5);
+}
+assert.ok(coralSeen,'Noir enemies retain their coral accent');
+await page.click('#reset');await page.click('#style-16');
 const placements=await page.evaluate(()=>{
  const grid=td.data.grid,n=grid.size;
  const point=id=>[grid.origin[0]+(id%n+.5)*grid.cell,grid.origin[1]+(Math.floor(id/n)+.5)*grid.cell];
@@ -90,6 +111,12 @@ const placements=await page.evaluate(()=>{
  return {placed,rejectedRoad};
 });assert.ok(placements.rejectedRoad);assert.equal(placements.placed,3);
 await page.click('#start');assert.equal(await page.evaluate(()=>td.state.running),true);
+await page.click('#style-mono');
+await page.evaluate(()=>td.advanceForTesting(1));
+const noirBattle=await page.evaluate(()=>td.sampleFrameForTesting());
+assert.ok(noirBattle.colorCount<=39,'combat stays within the Noir palette');
+assert.equal(await page.evaluate(()=>td.state.towers),3);
+await page.screenshot({path:`artifacts/${map}-noir-battle.png`,timeout:60000});
 await page.click('#style-8');assert.equal(await page.evaluate(()=>td.state.towers),3,'style switch preserves placed towers during combat');
 assert.equal(await page.evaluate(()=>td.state.running),true);
 const battle=await page.evaluate(()=>{td.advanceForTesting(65);return td.state;});
@@ -102,6 +129,8 @@ await page.waitForFunction(()=>document.documentElement.scrollWidth<=innerWidth,
 assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'mobile has no horizontal overflow');
 assert.ok((await page.evaluate(()=>td.sampleFrameForTesting())).colorCount>24,'mobile map renders scenery');
 await page.screenshot({path:`artifacts/${map}-mobile.png`,fullPage:true});
+await page.click('#style-mono');await page.waitForTimeout(250);await page.evaluate(()=>td.sampleFrameForTesting());
+await page.screenshot({path:`artifacts/${map}-noir-mobile.png`,fullPage:true});
 console.log(JSON.stringify({map,browser:'headless shell / software WebGL',checks:['load','48-color pixel rendering','24-color rendering','style switching during combat','click building','four spawn entries','invalid road placement','three towers','complete 12-enemy wave','reset','mobile layout'],battle:{...battle,path:battle.path.length}},null,2));
 }
 await page.click('#start');
@@ -124,6 +153,9 @@ assert.equal(await page.evaluate(()=>devicePixelRatio),2);
 const denseFrame=await page.evaluate(()=>td.sampleFrameForTesting());
 assert.ok(denseFrame.colorCount<=48&&denseFrame.colorCount>24,'high DPI preserves the palette');
 assert.deepEqual(await page.locator('#map canvas').evaluate(c=>({x:c.getBoundingClientRect().width/c.width,y:c.getBoundingClientRect().height/c.height})),{x:2,y:2},'odd viewport and high DPI preserve integer pixels');
+await page.click('#style-mono');await page.reload();await page.waitForFunction(()=>window.td);await page.evaluate(()=>td.pauseRenderingForTesting());
+assert.equal(await page.evaluate(()=>td.state.display.style),'mono','Noir preference persists across reload');
+assert.equal(await page.evaluate(()=>document.documentElement.dataset.art),'mono');
 if(errors.length)throw Error(errors.join('\n'));
 console.log('All browser checks passed, including style persistence and map switching.');
 }finally{await browser.close();await server?.close();}

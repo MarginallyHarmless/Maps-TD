@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { alignCameraToPixels } from './pixel-camera.js';
+import { applyArtDirection } from './art-direction.js';
 
 // Original art-direction palettes; the labels describe a look, not hardware emulation.
 const palette16=[
@@ -20,6 +21,12 @@ const palette8=[
   '#77434d','#c47958','#f2c48c',
   '#25485e','#5595a7','#b5dfd1',
   '#d85550','#ffc857','#50a589','#c0efbf','#72627d','#fff6e0'
+];
+const paletteMono=[
+  ...[12,16,20,24,28,33,39,45,52,60,69,79,90,102,115,129,143,158,174,191,209,229].map(v=>'#'+v.toString(16).padStart(2,'0').repeat(3)),
+  '#50422b','#806137','#b68b45','#e2ac50','#ffc857','#ffe3a0',
+  '#244844','#346d65','#46978b','#5bbdaf','#72ded1','#b8eee6',
+  '#623636','#a44747','#d95a5a','#ff6b6b','#ffaaa1'
 ];
 function rgb(hex){const n=parseInt(hex.slice(1),16);return new THREE.Vector3((n>>16)/255,((n>>8)&255)/255,(n&255)/255);}
 
@@ -67,14 +74,14 @@ export class RetroRenderer {
     this.setStyle('16');
   }
   setStyle(style){
-    this.style=style==='8'?'8':'16';
-    const colors=this.style==='8'?palette8:palette16;
+    this.style=['mono','16','8'].includes(style)?style:'mono';
+    const colors=this.style==='mono'?paletteMono:this.style==='8'?palette8:palette16;
     colors.forEach((hex,i)=>this.uniforms.palette.value[i].copy(rgb(hex)));
     this.uniforms.paletteCount.value=colors.length;
-    this.uniforms.refined.value=this.style==='16';
+    this.uniforms.refined.value=this.style!=='8';
     // Average geometry coverage before palette assignment. The finished image
     // still contains only palette colors on the same integer pixel grid.
-    const samples=this.style==='16'?Math.min(4,this.renderer.capabilities.maxSamples):0;
+    const samples=this.style!=='8'?Math.min(4,this.renderer.capabilities.maxSamples):0;
     if(this.target.samples!==samples){this.target.samples=samples;this.target.dispose();}
     this.renderer.domElement.style.imageRendering='pixelated';
     this.resize(this.width,this.height);
@@ -88,12 +95,13 @@ export class RetroRenderer {
     // Reassigning canvas.width/height clears WebGL even if the size is unchanged.
     // ResizeObserver can notify again after the explicit frame/layout update.
     if(this.renderer.domElement.width!==w||this.renderer.domElement.height!==h)this.renderer.setSize(w,h,false);
-    this.frameWidth=w;this.frameHeight=h;this.sceneScale=this.style==='16'?2:1;
+    this.frameWidth=w;this.frameHeight=h;this.sceneScale=this.style!=='8'?2:1;
     this.target.setSize(w*this.sceneScale,h*this.sceneScale);this.uniforms.texel.value.set(1/this.target.width,1/this.target.height);
     Object.assign(this.renderer.domElement.style,{width:`${w*this.pixelScale}px`,height:`${h*this.pixelScale}px`});
   }
 
   render(scene,camera){
+    applyArtDirection(scene,this.style==='mono');
     alignCameraToPixels(camera,this.frameWidth,this.frameHeight);
     this.renderer.setRenderTarget(this.target);this.renderer.render(scene,camera);
     this.sceneInfo={...this.renderer.info.render};

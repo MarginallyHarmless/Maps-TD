@@ -43,3 +43,46 @@ aside{background:#f1e8d4;border-right-color:#35434b}.location{background:#e5dcc1
 .map-badge{border:1px solid #6e817f;border-radius:4px;background:#26373d;color:#d7d8bd}
 #map-shell::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:none}
 .map-header,.view-controls,.art-controls,.legend,.map-bottom{z-index:2}#tooltip{z-index:3}
+
+/* Noir: neutral graphite surfaces; color identifies decisions and game objects. */
+:root[data-art="mono"]{color-scheme:dark;background:#101010;color:#c6cbd0}
+[data-art="mono"] aside{background:#17191c;border-right:1px solid #34383c}
+[data-art="mono"] .brand{color:#e5e7e9}
+[data-art="mono"] .brand-icon{background:#25282c;color:#ffc857;box-shadow:3px 3px 0 #0e1012}
+[data-art="mono"] .brand small,[data-art="mono"] .eyebrow{color:#929aa2}
+[data-art="mono"] .intro h1{color:#eceeed}
+[data-art="mono"] .intro p,[data-art="mono"] .objective p,[data-art="mono"] .subtle,[data-art="mono"] .hint,[data-art="mono"] #status{color:#a0a7ad}
+[data-art="mono"] .location{background:#202327;border:1px solid #3c4146;border-radius:3px;box-shadow:0 3px 0 #101214}
+[data-art="mono"] .location-top,[data-art="mono"] .location p,[data-art="mono"] .stats span,[data-art="mono"] .map-picker-label{color:#a0a7ad}
+[data-art="mono"] .stats{border-color:#3c4146}
+[data-art="mono"] .stats strong{color:#e0e3e5}
+[data-art="mono"] select,[data-art="mono"] #map-select{background:#14171a;border:1px solid #4b535a;color:#e0e4e7}
+[data-art="mono"] .objective h3{color:#72ded1}
+[data-art="mono"] .route-section,[data-art="mono"] .wave-section{border-color:#383e44}
+[data-art="mono"] .route-section label span{color:#ffc857}
+[data-art="mono"] .mode-buttons button{background:#24282c;border:1px solid #444c53;color:#bcc3c8;box-shadow:none}
+[data-art="mono"] .mode-buttons .active{background:#233b39;border-color:#4b8f85;color:#b8eee6}
+[data-art="mono"] .primary{background:#e2ac50;color:#17191c;border:1px solid #ffc857;box-shadow:0 3px 0 #0d0f11}
+[data-art="mono"] .primary:hover:not(:disabled){background:#ffc857}
+[data-art="mono"] .battle-stats,[data-art="mono"] .text-button{color:#a0a7ad}
+[data-art="mono"] .battle-stats b{color:#d5dedb}
+[data-art="mono"] .sidebar-footer,[data-art="mono"] .sidebar-footer a{color:#929aa2}
+[data-art="mono"] .map-header h2,[data-art="mono"] .map-header h2 #map-title{color:#e1e4e7;text-shadow:0 2px 0 #101010}
+[data-art="mono"] .map-header h2>span:last-child{color:#72ded1}
+[data-art="mono"] .map-badge{background:#17191c;border-color:#42494f;color:#c2c8ce}
+[data-art="mono"] .live-dot,[data-art="mono"] .map-badge i{background:#72ded1}
+[data-art="mono"] .view-controls,[data-art="mono"] .art-controls{background:#191c20f5;border-color:#485058;box-shadow:0 3px 0 #0a0b0d80}
+[data-art="mono"] .view-controls button,[data-art="mono"] .art-controls button{color:#a8b0b6}
+[data-art="mono"] .view-controls .active,[data-art="mono"] .art-controls .active{background:#d1d7d9;color:#1b2024;box-shadow:inset 0 -2px 0 #929a9d}
+[data-art="mono"] .art-controls #style-mono.active{background:#233b39;color:#b8eee6;box-shadow:inset 0 -2px 0 #46978b}
+[data-art="mono"] .legend{color:#b8bfc5}
+[data-art="mono"] .legend-building{background:#8f8f8f}
+[data-art="mono"] .legend-route{background:#ffc857}
+[data-art="mono"] .legend-target{background:#72ded1}
+[data-art="mono"] .map-bottom,[data-art="mono"] .map-bottom a{color:#969fa6}
+[data-art="mono"] .north{border-color:#485058;color:#c2c8ce}
+[data-art="mono"] #tooltip{background:#20262a;border:1px solid #72ded1;color:#e5e8e9;box-shadow:3px 3px 0 #080a0b99}
+[data-art="mono"] #loading{background:#101010;color:#e1e4e7}
+[data-art="mono"] .loading-mark{color:#ffc857}
+[data-art="mono"] button:focus-visible,[data-art="mono"] select:focus-visible,[data-art="mono"] a:focus-visible{outline-color:#72ded1}
+@media(min-width:801px) and (max-width:1150px){.art-controls{top:164px;left:35px;right:auto}}
